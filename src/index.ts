@@ -1,15 +1,12 @@
-// We define the empty imports so the auto-complete feature works as expected.
-import {} from '@dcl/sdk/math'
-import { engine } from '@dcl/sdk/ecs'
+import { engine, GltfContainer, Transform } from '@dcl/sdk/ecs'
 
-import { changeColorSystem, circularSystem } from './systems'
-import { setupUi } from './ui'
+import { SCENE_MIDDLE } from './config'
+import { setUpGameArea } from './gameArea'
 
 export function main() {
-  // Defining behavior. See `src/systems.ts` file.
-  engine.addSystem(circularSystem)
-  engine.addSystem(changeColorSystem)
+  const scene = engine.addEntity()
+  Transform.create(scene, { position: { x: SCENE_MIDDLE, y: 0, z: SCENE_MIDDLE } })
+  GltfContainer.create(scene, { src: 'models/base.glb' })
 
-  // draw UI. Here is the logic to spawn cubes.
-  setupUi()
+  setUpGameArea(scene)
 }

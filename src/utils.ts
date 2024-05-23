@@ -1,9 +1,12 @@
-export function getRandomHexColor(): string {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
+/*
+ * Returns random Int between 0 (inclusive) and max (exclusive)
+ */
+export const getRandomInt = (max: number) => Math.floor(Math.random() * max)
 
+/*
+ * Gets random item from array based on its probability
+ */
+export const getRandomItem = <T>(array: T[]): T => {
+  const index = getRandomInt(array.length)
+  return array[index]
+}

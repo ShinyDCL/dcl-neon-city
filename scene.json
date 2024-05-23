@@ -2,21 +2,40 @@
   "ecs7": true,
   "runtimeVersion": "7",
   "display": {
-    "title": "SDK7 Scene Template",
+    "title": "Neon City",
     "description": "template scene with SDK7",
     "navmapThumbnail": "images/scene-thumbnail.png",
     "favicon": "favicon_asset"
   },
-  "owner": "",
+  "owner": "ShinyDCL",
   "contact": {
-    "name": "SDK",
-    "email": ""
+    "name": "ShinyDCL",
+    "email": "citrons915@gmail.com"
   },
   "main": "bin/index.js",
   "tags": [],
   "scene": {
     "parcels": [
-      "0,0"
+      "0,0",
+      "0,1",
+      "0,2",
+      "0,3",
+      "1,0",
+      "1,1",
+      "1,2",
+      "1,3",
+      "2,0",
+      "2,1",
+      "2,2",
+      "2,3",
+      "3,0",
+      "3,1",
+      "3,2",
+      "3,3",
+      "4,0",
+      "4,1",
+      "4,2",
+      "4,3"
     ],
     "base": "0,0"
   },
