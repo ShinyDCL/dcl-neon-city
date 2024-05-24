@@ -1,6 +1,7 @@
 import { engine, Entity, InputAction, inputSystem, PointerEventType, Transform } from '@dcl/sdk/ecs'
 import { Quaternion } from '@dcl/sdk/math'
 
+import { Building, BuildingType, buildingTypeEnums } from './building'
 import { Road, RoadType, roadTypeEnums } from './road'
 import { getRandomItem } from './utils'
 
@@ -21,8 +22,15 @@ export const setUpGameArea = (parent: Entity) => {
         rotation: Quaternion.fromEulerDegrees(0, 0, 0),
         parent: gameArea
       }
-      const roadType = getRandomItem<RoadType>(roadTypeEnums)
-      roadTiles.push(new Road(transform, roadType))
+      const isRoadTile = Math.random() < 0.5
+
+      if (isRoadTile) {
+        const roadType = getRandomItem<RoadType>(roadTypeEnums)
+        roadTiles.push(new Road(transform, roadType))
+      } else {
+        const buildingType = getRandomItem<BuildingType>(buildingTypeEnums)
+        new Building(transform, buildingType)
+      }
     }
   }
 

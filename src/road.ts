@@ -22,10 +22,10 @@ export const roadTypeKeys = Object.keys(RoadType) as RoadTypeKey[]
 export const roadTypeEnums: RoadType[] = roadTypeKeys.map((key) => RoadType[key])
 
 const roadModels: Record<RoadType, string> = {
-  [RoadType.Straight]: 'models/roads/straight.glb',
-  [RoadType.Turn]: 'models/roads/turn.glb',
-  [RoadType.Intersection3]: 'models/roads/intersection3.glb',
-  [RoadType.Intersection4]: 'models/roads/intersection4.glb'
+  [RoadType.Straight]: 'models/straight.glb',
+  [RoadType.Turn]: 'models/turn.glb',
+  [RoadType.Intersection3]: 'models/intersection3.glb',
+  [RoadType.Intersection4]: 'models/intersection4.glb'
 } as const
 
 export class Road {
