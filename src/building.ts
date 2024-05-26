@@ -1,17 +1,15 @@
 import { engine, GltfContainer, Transform, TransformType } from '@dcl/sdk/ecs'
 
 export enum BuildingType {
-  OfficeSmall = 'OfficeSmall',
-  OfficeMedium = 'OfficeMedium',
-  OfficeLarge = 'OfficeLarge',
-  HouseSmall = 'HouseSmall',
-  HouseMedium = 'HouseMedium',
-  HouseLarge = 'HouseLarge'
+  OfficeSmall = 'OS',
+  OfficeMedium = 'OM',
+  OfficeLarge = 'OL',
+  HouseSmall = 'HS',
+  HouseMedium = 'HM',
+  HouseLarge = 'HL'
 }
 
-export type BuildingTypeKey = keyof typeof BuildingType
-export const buildingTypeKeys = Object.keys(BuildingType) as BuildingTypeKey[]
-export const buildingTypeEnums: BuildingType[] = buildingTypeKeys.map((key) => BuildingType[key])
+export const buildingTypeEnums: BuildingType[] = Object.values(BuildingType)
 
 const buildingModels: Record<BuildingType, string> = {
   [BuildingType.OfficeSmall]: 'models/officeSmall.glb',

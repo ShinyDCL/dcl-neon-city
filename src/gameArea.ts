@@ -1,40 +1,44 @@
 import { engine, Entity, InputAction, inputSystem, PointerEventType, Transform } from '@dcl/sdk/ecs'
-import { Quaternion } from '@dcl/sdk/math'
 
-import { Building, BuildingType, buildingTypeEnums } from './building'
-import { Road, RoadType, roadTypeEnums } from './road'
-import { getRandomItem } from './utils'
+import { maps } from './maps/maps'
+import { Road } from './road'
+import { createTile, tileSize } from './tile'
 
-const tileSize = 3.2 // Tile model size in meters
 const size = 10 // Game area size
 
 export const setUpGameArea = (parent: Entity) => {
   const gameArea = engine.addEntity()
   Transform.create(gameArea, { parent })
 
-  const roadTiles: Road[] = []
+  // Shift the game tiles so that they are in center
   const startPos = -((size * tileSize) / 2) + tileSize / 2
+  const gameTiles = engine.addEntity()
+  Transform.create(gameTiles, {
+    position: { x: startPos, y: 0, z: startPos },
+    parent: gameArea
+  })
+
+  const roadTiles: Road[] = []
+  const map = maps[0]
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
-      const transform = {
-        position: { x: startPos + i * tileSize, y: 0, z: startPos + j * tileSize },
-        rotation: Quaternion.fromEulerDegrees(0, 0, 0),
-        parent: gameArea
-      }
-      const isRoadTile = Math.random() < 0.5
-
-      if (isRoadTile) {
-        const roadType = getRandomItem<RoadType>(roadTypeEnums)
-        roadTiles.push(new Road(transform, roadType))
-      } else {
-        const buildingType = getRandomItem<BuildingType>(buildingTypeEnums)
-        new Building(transform, buildingType)
+      const tile = createTile(map, i, j, gameTiles)
+      if (tile.constructor.name === Road.name) {
+        roadTiles.push(tile as Road)
       }
     }
   }
 
+  addSystem(roadTiles)
+}
+
+const addSystem = (roadTiles: Road[]) => {
+  const tilesInWinningPath = roadTiles.filter((road) => road.getIsPartOfWinningPath()).length
+
   engine.addSystem(() => {
+    let validTileCount = 0
+
     roadTiles.forEach((road) => {
       const entity = road.getEntity()
       if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN, entity)) {
@@ -48,6 +52,10 @@ export const setUpGameArea = (parent: Entity) => {
       if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_HOVER_LEAVE, entity)) {
         road.hideBorder()
       }
+
+      if (road.getIsRotationValid()) validTileCount++
     })
+
+    if (validTileCount === tilesInWinningPath) console.log('won')
   })
 }
