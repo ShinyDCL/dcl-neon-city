@@ -1,10 +1,12 @@
-import { engine, Entity, InputAction, inputSystem, PointerEventType, Transform } from '@dcl/sdk/ecs'
+import { engine, Entity, GltfContainer, InputAction, inputSystem, PointerEventType, Transform } from '@dcl/sdk/ecs'
+import { Quaternion } from '@dcl/sdk/math'
 
 import { maps } from './maps/maps'
 import { Road } from './road'
 import { createTile, tileSize } from './tile'
+import { getIsVisible, showLabel } from './ui/ui'
 
-const size = 10 // Game area size
+const size = 13 // Game area size
 
 export const setUpGameArea = (parent: Entity) => {
   const gameArea = engine.addEntity()
@@ -19,7 +21,7 @@ export const setUpGameArea = (parent: Entity) => {
   })
 
   const roadTiles: Road[] = []
-  const map = maps[0]
+  const map = maps[1]
 
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
@@ -31,6 +33,22 @@ export const setUpGameArea = (parent: Entity) => {
   }
 
   addSystem(roadTiles)
+
+  const startSign = engine.addEntity()
+  GltfContainer.create(startSign, { src: 'models/startSign.glb' })
+  Transform.create(startSign, {
+    position: { x: 12 * tileSize, y: 0, z: 6 * tileSize },
+    rotation: Quaternion.fromEulerDegrees(0, 90, 0),
+    parent: gameTiles
+  })
+
+  const finishSign = engine.addEntity()
+  GltfContainer.create(finishSign, { src: 'models/finishSign.glb' })
+  Transform.create(finishSign, {
+    position: { x: 0 * tileSize, y: 0, z: 6 * tileSize },
+    rotation: Quaternion.fromEulerDegrees(0, 90, 0),
+    parent: gameTiles
+  })
 }
 
 const addSystem = (roadTiles: Road[]) => {
@@ -56,6 +74,6 @@ const addSystem = (roadTiles: Road[]) => {
       if (road.getIsRotationValid()) validTileCount++
     })
 
-    if (validTileCount === tilesInWinningPath) console.log('won')
+    if (validTileCount === tilesInWinningPath && !getIsVisible()) showLabel()
   })
 }
