@@ -1,10 +1,18 @@
-import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
+import ReactEcs, { ReactEcsRenderer, UiEntity } from '@dcl/sdk/react-ecs'
 
 import { Modal } from './modal'
 import { Sidebar } from './sidebar'
 
 export const setUpUI = () => {
-  const uiComponent = () => [Modal(), Sidebar()]
-
-  ReactEcsRenderer.setUiRenderer(uiComponent)
+  ReactEcsRenderer.setUiRenderer(() => (
+    <UiEntity
+      uiTransform={{
+        width: '100%',
+        height: '100%'
+      }}
+    >
+      <Modal />
+      <Sidebar />
+    </UiEntity>
+  ))
 }
