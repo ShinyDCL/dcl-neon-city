@@ -1,45 +1,53 @@
-import { engine, Entity, GltfContainer, InputAction, inputSystem, PointerEventType, Transform } from '@dcl/sdk/ecs'
+import {
+  engine,
+  Entity,
+  GltfContainer,
+  InputAction,
+  inputSystem,
+  PointerEventType,
+  removeEntityWithChildren,
+  Transform
+} from '@dcl/sdk/ecs'
 import { Quaternion } from '@dcl/sdk/math'
 
 import { maps } from './maps/maps'
 import { Road } from './road'
 import { createTile, tileSize } from './tile'
-import { getIsVisible, showLabel } from './ui/ui'
 
 const size = 13 // Game area size
 
-export const setUpGameArea = (parent: Entity) => {
+export const setUpGameArea = (parent: Entity, level: number, onLevelFinished: (cleanup: () => void) => void) => {
+  const map = maps[level]
+  const roads: Road[] = []
+
   const gameArea = engine.addEntity()
   Transform.create(gameArea, { parent })
 
   // Shift the game tiles so that they are in center
   const startPos = -((size * tileSize) / 2) + tileSize / 2
-  const gameTiles = engine.addEntity()
-  Transform.create(gameTiles, {
+  const tileParent = engine.addEntity()
+  Transform.create(tileParent, {
     position: { x: startPos, y: 0, z: startPos },
     parent: gameArea
   })
 
-  const roadTiles: Road[] = []
-  const map = maps[1]
-
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
-      const tile = createTile(map, i, j, gameTiles)
+      const tile = createTile(map, i, j, tileParent)
       if (tile.constructor.name === Road.name) {
-        roadTiles.push(tile as Road)
+        roads.push(tile as Road)
       }
     }
   }
 
-  addSystem(roadTiles)
+  addSystem(roads, gameArea, onLevelFinished)
 
   const startSign = engine.addEntity()
   GltfContainer.create(startSign, { src: 'models/startSign.glb' })
   Transform.create(startSign, {
     position: { x: 12 * tileSize, y: 0, z: 6 * tileSize },
     rotation: Quaternion.fromEulerDegrees(0, 90, 0),
-    parent: gameTiles
+    parent: tileParent
   })
 
   const finishSign = engine.addEntity()
@@ -47,17 +55,16 @@ export const setUpGameArea = (parent: Entity) => {
   Transform.create(finishSign, {
     position: { x: 0 * tileSize, y: 0, z: 6 * tileSize },
     rotation: Quaternion.fromEulerDegrees(0, 90, 0),
-    parent: gameTiles
+    parent: tileParent
   })
 }
+const addSystem = (roads: Road[], gameArea: Entity, onLevelFinished: (cleanup: () => void) => void) => {
+  const roadsInWinningPath = roads.filter((road) => road.getIsPartOfWinningPath()).length
 
-const addSystem = (roadTiles: Road[]) => {
-  const tilesInWinningPath = roadTiles.filter((road) => road.getIsPartOfWinningPath()).length
+  const roadSystem = () => {
+    let validRoadCount = 0
 
-  engine.addSystem(() => {
-    let validTileCount = 0
-
-    roadTiles.forEach((road) => {
+    roads.forEach((road) => {
       const entity = road.getEntity()
       if (inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN, entity)) {
         road.rotate()
@@ -71,9 +78,17 @@ const addSystem = (roadTiles: Road[]) => {
         road.hideBorder()
       }
 
-      if (road.getIsRotationValid()) validTileCount++
+      if (road.getIsRotationValid()) validRoadCount++
     })
 
-    if (validTileCount === tilesInWinningPath && !getIsVisible()) showLabel()
-  })
+    if (validRoadCount === roadsInWinningPath) {
+      engine.removeSystem(roadSystem)
+
+      onLevelFinished(() => {
+        removeEntityWithChildren(engine, gameArea)
+      })
+    }
+  }
+
+  engine.addSystem(roadSystem)
 }
