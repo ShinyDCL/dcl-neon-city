@@ -3,7 +3,7 @@
   "runtimeVersion": "7",
   "display": {
     "title": "Neon City",
-    "description": "template scene with SDK7",
+    "description": "Scene created for Game Jam 2024",
     "navmapThumbnail": "images/scene-thumbnail.png",
     "favicon": "favicon_asset"
   },
@@ -40,21 +40,12 @@
       "name": "spawn1",
       "default": true,
       "position": {
-        "x": [
-          0,
-          3
-        ],
-        "y": [
-          0,
-          0
-        ],
-        "z": [
-          0,
-          3
-        ]
+        "x": 32,
+        "y": 0,
+        "z": 1
       },
       "cameraTarget": {
-        "x": 8,
+        "x": 32,
         "y": 1,
         "z": 8
       }
@@ -63,5 +54,8 @@
   "featureToggles": {
     "voiceChat": "enabled",
     "portableExperiences": "enabled"
+  },
+  "worldConfiguration": {
+    "name": "Nightlife.dcl.eth"
   }
 }

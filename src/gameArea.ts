@@ -1,7 +1,6 @@
 import {
   engine,
   Entity,
-  GltfContainer,
   InputAction,
   inputSystem,
   PointerEventType,
@@ -21,7 +20,7 @@ export const setUpGameArea = (parent: Entity, level: number, onLevelFinished: (c
   const roads: Road[] = []
 
   const gameArea = engine.addEntity()
-  Transform.create(gameArea, { parent })
+  Transform.create(gameArea, { rotation: Quaternion.fromEulerDegrees(0, -90, 0), parent })
 
   // Shift the game tiles so that they are in center
   const startPos = -((size * tileSize) / 2) + tileSize / 2
@@ -41,22 +40,6 @@ export const setUpGameArea = (parent: Entity, level: number, onLevelFinished: (c
   }
 
   addSystem(roads, gameArea, onLevelFinished)
-
-  const startSign = engine.addEntity()
-  GltfContainer.create(startSign, { src: 'models/startSign.glb' })
-  Transform.create(startSign, {
-    position: { x: 12 * tileSize, y: 0, z: 6 * tileSize },
-    rotation: Quaternion.fromEulerDegrees(0, 90, 0),
-    parent: tileParent
-  })
-
-  const finishSign = engine.addEntity()
-  GltfContainer.create(finishSign, { src: 'models/finishSign.glb' })
-  Transform.create(finishSign, {
-    position: { x: 0 * tileSize, y: 0, z: 6 * tileSize },
-    rotation: Quaternion.fromEulerDegrees(0, 90, 0),
-    parent: tileParent
-  })
 }
 const addSystem = (roads: Road[], gameArea: Entity, onLevelFinished: (cleanup: () => void) => void) => {
   const roadsInWinningPath = roads.filter((road) => road.getIsPartOfWinningPath()).length
