@@ -78,7 +78,6 @@ export class Road {
     const transform = Transform.getMutable(this.entity)
     const currentRotation = Quaternion.toEulerAngles(transform.rotation)
     const newRotationY = (currentRotation.y + 90) % 360
-    console.log(newRotationY, this.validRotations)
 
     transform.rotation = Quaternion.fromEulerDegrees(currentRotation.x, newRotationY, currentRotation.z)
     this.setIsRotationValid(newRotationY)

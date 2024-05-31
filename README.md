@@ -10,6 +10,40 @@ In this puzzle game, players must use their logic and problem-solving skills to 
 ![City buildings](screenshots/screenshot1.png)
 ![Game map](screenshots/screenshot2.png)
 
+## Game maps
+
+In case if you get stuck in some level, here are the correct paths:
+
+### Level 1
+
+![Level 1 correct path](screenshots/level1.png)
+
+### Level 2
+
+![Level 2 correct path](screenshots/level2.png)
+
+### Level 3
+
+![Level 3 correct path](screenshots/level3.png)
+
+### Level 4
+
+![Level 4 correct path](screenshots/level4.png)
+
+### Level 5
+
+![Level 5 correct path](screenshots/level5.png)
+
+## Resources
+
+Resources used in this project:
+
+- 'Click' sound from [Decentraland smart items repo](https://github.com/decentraland/smart-items/blob/master/button_genesis_blue/sounds/click.mp3)
+
+- Pavement, asphalt and building facade textures from [ambientCG](https://ambientcg.com/). All ambientCG assets are provided under the [Creative Commons CC0 1.0 Universal License](https://docs.ambientcg.com/license/)
+
+- [glTF Pipeline tool](https://github.com/CesiumGS/gltf-pipeline) used for saving 3D model textures as separate files
+
 ## Try it out
 
 **Previewing the scene**
