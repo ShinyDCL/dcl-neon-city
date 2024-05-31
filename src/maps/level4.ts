@@ -78,7 +78,7 @@ export const level4: Tile[][] = [
   ],
   [
     { tileType: 'HL' },
-    { tileType: 'RT', partOfWinningPath: true, validRotations: [0, 270] },
+    { tileType: 'RT', partOfWinningPath: true, validRotations: [0] },
     { tileType: 'RS', partOfWinningPath: true, validRotations: [90, 270] },
     { tileType: 'R3W', partOfWinningPath: true, validRotations: [0, 180] },
     { tileType: 'RS', partOfWinningPath: true, validRotations: [90, 270] },
