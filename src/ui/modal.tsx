@@ -3,6 +3,8 @@ import ReactEcs, { UiEntity } from '@dcl/sdk/react-ecs'
 import { colors } from './colors'
 
 let isOpen = false
+let message = ''
+let buttonText = ''
 let closeCallback: (() => void) | null
 
 export const Modal = () => (
@@ -44,7 +46,7 @@ export const Modal = () => (
           height: 40
         }}
         uiText={{
-          value: 'Level completed!',
+          value: message,
           fontSize: 40,
           color: colors.white
         }}
@@ -69,7 +71,7 @@ export const Modal = () => (
           }
         }}
         uiText={{
-          value: 'Start next level',
+          value: buttonText,
           fontSize: 30,
           color: colors.orange
         }}
@@ -79,10 +81,13 @@ export const Modal = () => (
   </UiEntity>
 )
 
-export const openModal = (callback: () => void) => {
+export const openModal = (msg: string, buttonTxt: string, callback: () => void) => {
   isOpen = true
+  message = msg
+  buttonText = buttonTxt
   closeCallback = callback
 }
+
 export const closeModal = () => {
   isOpen = false
 

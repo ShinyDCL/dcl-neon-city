@@ -1,6 +1,8 @@
 import {
+  ColliderLayer,
   engine,
   Entity,
+  GltfContainer,
   InputAction,
   inputSystem,
   PointerEventType,
@@ -21,6 +23,10 @@ export const setUpGameArea = (parent: Entity, level: number, onLevelFinished: (c
 
   const gameArea = engine.addEntity()
   Transform.create(gameArea, { rotation: Quaternion.fromEulerDegrees(0, -90, 0), parent })
+  GltfContainer.create(gameArea, {
+    src: 'models/gameAreaCollider.glb',
+    invisibleMeshesCollisionMask: ColliderLayer.CL_PHYSICS
+  })
 
   // Shift the game tiles so that they are in center
   const startPos = -((size * tileSize) / 2) + tileSize / 2
@@ -66,6 +72,7 @@ const addSystem = (roads: Road[], gameArea: Entity, onLevelFinished: (cleanup: (
 
     if (validRoadCount === roadsInWinningPath) {
       engine.removeSystem(roadSystem)
+      roads.forEach((road) => road.removePointerEvents())
 
       onLevelFinished(() => {
         removeEntityWithChildren(engine, gameArea)

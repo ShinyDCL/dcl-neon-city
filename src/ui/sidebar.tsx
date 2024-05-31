@@ -33,7 +33,8 @@ export const Sidebar = () => (
             height: 70,
             margin: { bottom: 8 },
             padding: 4,
-            flexDirection: 'column'
+            flexDirection: 'column',
+            alignItems: 'center'
           }}
           uiBackground={{
             textureMode: 'nine-slices',

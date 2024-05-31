@@ -1,4 +1,5 @@
 import {
+  AudioSource,
   engine,
   Entity,
   GltfContainer,
@@ -43,6 +44,12 @@ export class Road {
     Transform.create(entity, transform)
     this.entity = entity
 
+    AudioSource.create(entity, {
+      audioClipUrl: 'sounds/click.mp3',
+      loop: false,
+      playing: false
+    })
+
     const border = engine.addEntity()
     Transform.create(border, {
       scale: { x: 0, y: 0, z: 0 },
@@ -75,6 +82,7 @@ export class Road {
 
     transform.rotation = Quaternion.fromEulerDegrees(currentRotation.x, newRotationY, currentRotation.z)
     this.setIsRotationValid(newRotationY)
+    this.playSound()
   }
 
   /*
@@ -117,5 +125,14 @@ export class Road {
         }
       ]
     })
+  }
+
+  removePointerEvents = () => {
+    PointerEvents.deleteFrom(this.entity)
+  }
+
+  playSound = () => {
+    const audioSource = AudioSource.getMutable(this.entity)
+    audioSource.playing = true
   }
 }
