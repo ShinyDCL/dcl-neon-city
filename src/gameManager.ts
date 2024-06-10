@@ -33,7 +33,8 @@ export abstract class GameManager {
     setUpGameArea(this.root, level, this.finishLevel)
 
     if (level === 1) {
-      // Win condition here - finished first (level 0) and started second (level 1)
+      // win condition - this line will give the ticket to the player
+      // finished first (level 0) and started second (level 1)
       console.log('win')
     }
   }
